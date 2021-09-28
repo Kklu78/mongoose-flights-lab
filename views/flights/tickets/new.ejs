@@ -1,0 +1,53 @@
+<%- include('../../partials/header') %>
+
+  <section id="show-page">
+    <div>Airline: </div>
+    <div>
+      <%= flight.airline %>
+    </div>
+    <div>Airport: </div>
+    <div>
+      <%= flight.airport %>
+    </div>
+    <div>Flight No.: </div>
+    <div>
+      <%= flight.flightNo %>
+    </div>
+    <div>Date: </div>
+    <div>
+      <%= flight.departs.toISOString().split('T')[0].slice(5)+'-'+flight.departs.toISOString().split('T')[0].slice(0,4)
+        %>
+    </div>
+    <div>Time:</div>
+    <div>
+      <%= Number(flight.departs.toString().slice(16,18)) < 12 ?
+        String(Number(flight.departs.toString().slice(16,18)))+flight.departs.toString().slice(18,24)+' AM' :
+        String(Number(flight.departs.toString().slice(16,18))-12)+flight.departs.toString().slice(18,24)+' PM'%>
+    </div>
+  </section>
+  <h2>Seating Chart</h2>
+  <p> <br><strong>Bolded</strong> seats are still <br>available for purchase
+
+  <div class="parent">
+    <% ['1', '2' , '3' , '4' , '5' , '6' , '7' , '8' , '9' ].forEach(n=> { %>
+      <% ['A', 'B' , 'C' , 'D' , 'E' , 'F' ].forEach(l=> { %>
+
+
+        <div class= <%= takenSeats.includes(l+n) ? 'filled' : 'open'  %> ><%= l+n %>
+        </div>
+        <% }) %>
+          <% }) %>
+
+
+  </div>
+  
+  </p>
+  <form action="/flights/<%= flight._id %>/tickets" method="POST">
+    <label><%= `Price: $${price}.00` %> </label>
+    <input name="price" type='hidden' value=<%= `${price}.00` %>>
+    <br>
+    <input name="seat" required pattern="[A-F][1-9]\d?">
+    <input type="submit" value="Purchase Seat">
+  </form>
+
+  <%- include('../../partials/footer') %>

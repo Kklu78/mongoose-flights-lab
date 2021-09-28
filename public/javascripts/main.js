@@ -1,0 +1,1 @@
+document.querySelectorAll('#datetime').min = new Date().toISOString()
